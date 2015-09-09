@@ -47,14 +47,14 @@ class AVRestClient{
 	 */
 	public function request($args){
 		$isFile = false;
-		$cacert = getcwd().'/cacert.pem'; // download cacert.pem from http://curl.haxx.se/docs/caextract.html and paste it in this folder
+		#$cacert = getcwd().'/cacert.pem'; // download cacert.pem from http://curl.haxx.se/docs/caextract.html and paste it in this folder
 		$c = curl_init();
 		curl_setopt($c, CURLOPT_TIMEOUT, 30);
 		curl_setopt($c, CURLOPT_USERAGENT, 'AVOSCloud.com-php-library/2.0');
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($c, CURLINFO_HEADER_OUT, true);
 		curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true); // enable using SSL to access https
-		curl_setopt($c, CURLOPT_CAINFO, $cacert);
+		#curl_setopt($c, CURLOPT_CAINFO, $cacert);
 		curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
 		if(substr($args['requestUrl'],0,5) == 'files'){
 			curl_setopt($c, CURLOPT_HTTPHEADER, array(
@@ -75,9 +75,9 @@ class AVRestClient{
 		else{
 			curl_setopt($c, CURLOPT_HTTPHEADER, array(
 				'Content-Type: application/json',
-				'X-AVOSCloud-Application-Id: '.$this->_appid,
-				'X-AVOSCloud-Application-Key: '.$this->_appkey,
-				'X-AVOSCloud-Master-Key: '.$this->_masterkey
+				'X-LC-Id: '.$this->_appid,
+				'X-LC-Key: '.$this->_appkey,
+				#'X-LC-Master-Key: '.$this->_masterkey
 			));
 		}
 		curl_setopt($c, CURLOPT_CUSTOMREQUEST, $args['method']);
