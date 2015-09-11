@@ -16,6 +16,8 @@ class AVRestClient{
 	private $_appkey = '';
 	private $_AVurl = '';
 
+	public $needMasterKey;
+
 	public $data;
 	public $requestUrl = '';
 	public $returnData = '';
@@ -73,10 +75,11 @@ class AVRestClient{
     		));
 		}
 		else{
+			$key = empty($this->needMasterKey) ? $this->_appkey : $this->_masterkey;
 			curl_setopt($c, CURLOPT_HTTPHEADER, array(
 				'Content-Type: application/json',
 				'X-LC-Id: '.$this->_appid,
-				'X-LC-Key: '.$this->_appkey,
+				'X-LC-Key: '. $key,
 				#'X-LC-Master-Key: '.$this->_masterkey
 			));
 		}

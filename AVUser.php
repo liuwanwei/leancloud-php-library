@@ -97,8 +97,7 @@ public function socialLogin(){
 			$this->throwError('objectId and sessionToken are required for the update method');
 		}
 		
-	}
-
+	} 
 	public function delete($objectId,$sessionToken){
 		if(!empty($objectId) || !empty($sessionToken)){
 			$request = $this->request(array(
