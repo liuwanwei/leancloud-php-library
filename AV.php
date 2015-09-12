@@ -58,7 +58,9 @@ class AVRestClient{
 		curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true); // enable using SSL to access https
 		#curl_setopt($c, CURLOPT_CAINFO, $cacert);
 		curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
-		if(substr($args['requestUrl'],0,5) == 'files'){
+
+		$prefix = substr($args['requestUrl'],0,5); 
+		if($prefix == 'files'){
 			curl_setopt($c, CURLOPT_HTTPHEADER, array(
 				'Content-Type: '.$args['contentType'],
 				'X-AVOSCloud-Application-Id: '.$this->_appid,
@@ -66,7 +68,7 @@ class AVRestClient{
 			));
 			$isFile = true;
 		}
-		else if(substr($args['requestUrl'],0,5) == 'users' && isset($args['sessionToken'])){
+		else if($prefix  == 'users' && isset($args['sessionToken'])){
 			curl_setopt($c, CURLOPT_HTTPHEADER, array(
     			'Content-Type: application/json',
     			'X-AVOSCloud-Application-Id: '.$this->_appid,
@@ -75,12 +77,11 @@ class AVRestClient{
     		));
 		}
 		else{
-			$key = empty($this->needMasterKey) ? $this->_appkey : $this->_masterkey;
+			$leanCloudSign = $this->generateSign();	
 			curl_setopt($c, CURLOPT_HTTPHEADER, array(
 				'Content-Type: application/json',
 				'X-LC-Id: '.$this->_appid,
-				'X-LC-Key: '. $key,
-				#'X-LC-Master-Key: '.$this->_masterkey
+				'X-LC-Sign: '.$leanCloudSign,
 			));
 		}
 		curl_setopt($c, CURLOPT_CUSTOMREQUEST, $args['method']);
@@ -94,7 +95,7 @@ class AVRestClient{
 				$postData = json_encode($args['data']);
 			}
 
-			curl_setopt($c, CURLOPT_POSTFIELDS, $postData );
+			curl_setopt($c, CURLOPT_POSTFIELDS, $postData);
 		}
 
 		if($args['requestUrl'] == 'login'){
@@ -127,6 +128,21 @@ class AVRestClient{
 		}
 		*/
 		return $this->checkResponse($response,$responseCode,$expectedCode);
+	}
+
+	private function generateSign(){
+		$now = time();
+		if($this->needMasterKey){
+			$string = $now.$this->_masterkey;
+			$signedString = md5($string);
+			$lcSign = $signedString . ',' . $now . ',master';
+		}else{
+			$string = $now.$this->_appkey;
+			$signedString = md5($string);
+			$lcSign = $signedString . ',' . $now;
+		}
+
+		return $lcSign;
 	}
 
 	public function dataType($type,$params){

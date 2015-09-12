@@ -49,15 +49,6 @@ class AVObject extends AVRestClient{
 
 	public function update($id){
 		if($this->_className != '' || !empty($id)){
-
-			$array = array(
-				'method' => 'PUT',
-				'requestUrl' => 'classes/'.$this->_className.'/'.$id,
-				'data' => $this->data,);
-			print_r($array);
-			return;
-
-
 			$request = $this->request(array(
 				'method' => 'PUT',
 				'requestUrl' => 'classes/'.$this->_className.'/'.$id,
