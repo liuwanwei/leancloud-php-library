@@ -151,9 +151,8 @@ class AVRestClient{
 				case 'date':
 					$return = array(
 						"__type" => "Date",
-						// TODO: 从这篇问答里找到方法，但没理解透，择日理解透
 						// https://github.com/killme2008/leancloud-php-library/issues/1
-						"iso" => date("Y-m-d\TH:i:s.000\Z", strtotime($params) - 3600 * 8)
+						"iso" => date("Y-m-d\TH:i:s.000\Z", $params),
 					);
 					break;
 				case 'bytes':
