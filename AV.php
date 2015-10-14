@@ -1,5 +1,5 @@
 <?php namespace leancloud;
-require_once( 'AVConfig.php' );
+require_once( dirname(__FILE__).'/../AVConfig.php' );
 require_once( 'AVObject.php' );
 require_once( 'AVQuery.php' );
 require_once( 'AVUser.php' ) ;
