@@ -9,7 +9,7 @@ class AVQuery extends AVRestClient{
   private $_include = array();
 
   public function __construct($class=''){
-	if($class == 'users' || $class == 'installation'){
+	if($class == 'users' || $class == 'installation' || $class == 'cloudQuery'){
 	  $this->_requestUrl = $class;
 	}
 	elseif($class != ''){
@@ -21,6 +21,16 @@ class AVQuery extends AVRestClient{
 
 	parent::__construct();
 
+  }
+
+  public function findCQL($cql){
+  	$urlParams['cql'] = $cql;
+  	$request = $this->request(array(
+  									'method' => 'GET',
+  									'requestUrl' => $this->_requestUrl,
+  									'urlParams' => $urlParams,
+  									));
+  	return $request;
   }
 
   public function find(){
